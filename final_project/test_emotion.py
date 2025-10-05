@@ -1,5 +1,5 @@
 """Simple runner to test the emotion_detector function."""
-from .emotion_detection import emotion_detector
+from .EmotionDetection.emotion_detection import emotion_detector
 
 
 def main():
