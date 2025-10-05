@@ -13,27 +13,28 @@ def emotion_detector(text_to_analyse):  # Define a function named sentiment_anal
 
 
     response = requests.post(url, json=myobj, headers=header)
-    formatted_response = json.loads(response.text)
 
-    # Extract emotion scores
-    emotions = formatted_response['emotionPredictions'][0]['emotion']
-    anger_score = emotions['anger']
-    disgust_score = emotions['disgust']
-    fear_score = emotions['fear']
-    joy_score = emotions['joy']
-    sadness_score = emotions['sadness']
 
-    # Determine dominant emotion
-    emotion_scores = {
-        'anger': anger_score,
-        'disgust': disgust_score,
-        'fear': fear_score,
-        'joy': joy_score,
-        'sadness': sadness_score
-    }
-    dominant_emotion = max(emotion_scores, key=emotion_scores.get)
+    if response.status_code == 200:
+        formatted_response = json.loads(response.text)
+        emotions = formatted_response['emotionPredictions'][0]['emotion']
+        anger_score = emotions['anger']
+        disgust_score = emotions['disgust']
+        fear_score = emotions['fear']
+        joy_score = emotions['joy']
+        sadness_score = emotions['sadness']
+        emotion_scores = {
+            'anger': anger_score,
+            'disgust': disgust_score,
+            'fear': fear_score,
+            'joy': joy_score,
+            'sadness': sadness_score
+        }
+        dominant_emotion = max(emotion_scores, key=emotion_scores.get)
+    else:
+        # Handle 400 or 500 errors
+        anger_score = disgust_score = fear_score = joy_score = sadness_score = dominant_emotion = None
 
-    # Return formatted output
     return {
         'anger': anger_score,
         'disgust': disgust_score,
